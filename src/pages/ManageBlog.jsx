@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import BlogCard from '../components/BlogCard';
 import { blogs } from '../utils/blogsData';
+import { Link } from 'react-router-dom';
+
 
 const ManageBlog = () => {
   // State for current page
@@ -56,6 +58,12 @@ const ManageBlog = () => {
 
       {/* Heading for blogs */}
       <h2 className="text-2xl font-bold mb-4">Blogs</h2>
+
+      {/* Add New Car button */}
+      <Link to="/add-blog" className="bg-green-500 text-white p-2 rounded mt-4 inline-block">
+        Add New Blogs
+      </Link>
+
 
       {/* Blog cards grid or flex */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 transition-opacity duration-1000 ease-in-out">

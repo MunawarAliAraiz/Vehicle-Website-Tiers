@@ -35,7 +35,7 @@ const CarDetail = () => {
 
   // Handle Edit button click
   const handleEdit = () => {
-    // Add logic to navigate to the edit page for the current car
+    navigate(`/edit-car/${id}`)
     console.log('Edit button clicked');
   };
 
@@ -79,7 +79,7 @@ const CarDetail = () => {
         <div className="mt-4">
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4 hover:bg-blue-600"
-            onClick={handleEdit}
+            onClick={(id)=> handleEdit(id)}
           >
             Edit
           </button>

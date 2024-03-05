@@ -8,6 +8,8 @@ import CarDetail from './pages/CarDetail';
 import BlogDetail from './pages/BlogDetail';
 import ManageCar from './pages/ManageCar';
 import ManageBlog from './pages/ManageBlog';
+import CarForm from './pages/CarForm';
+import BlogForm from './pages/BlogForm';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import './App.css';
@@ -24,7 +26,11 @@ function App() {
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/orders' element={<Orders />} />
           <Route path='/manage-car' element={<ManageCar />} />
+          <Route path='/add-car' element={<CarForm />} />
+          <Route path='/edit-car/:carId' element={<CarForm />} />
           <Route path='/manage-blogs' element={<ManageBlog />} />
+          <Route path='/add-blog' element={<BlogForm />} />
+          <Route path='/edit-blog/:blogId' element={<BlogForm />} />
           <Route path='/credentials' element={<Credentials />} />
           <Route path='/car/:id' element={<CarDetail />} />
           <Route path='/blog/:id' element={<BlogDetail />} />

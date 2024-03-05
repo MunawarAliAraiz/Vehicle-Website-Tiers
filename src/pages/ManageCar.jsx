@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CarCard from '../components/CarCard';
 import { cars } from '../utils/carsData';
-
+import { Link } from 'react-router-dom';
 
 const ManageCar = () => {
   // State for current page
@@ -57,6 +57,11 @@ const ManageCar = () => {
 
       {/* Heading for cars */}
       <h2 className="text-2xl font-bold mb-4">Cars</h2>
+
+      {/* Add New Car button */}
+      <Link to="/add-car" className="bg-green-500 text-white p-2 rounded mt-4 inline-block">
+        Add New Car
+      </Link>
 
       {/* Car cards grid or flex */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 transition-opacity duration-1000 ease-in-out">
