@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import bg from '../assets/bg.jpg'
+import Cookies from 'js-cookie';
+import bg from '../assets/bg.jpg';
+
+const serverUrl = 'http://localhost:4000';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -14,26 +17,47 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Validation logic (you may add more sophisticated validation)
     if (!email || !password) {
       setError('Please enter both email and password');
       return;
     }
 
-    // Handle login logic (you may send a request to your server for authentication)
-    // ...
+    try {
+      // Send a request to your server for authentication
+      const response = await fetch(`${serverUrl}/api/users/adminpanellogin`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    // Reset form
-    setEmail('');
-    setPassword('');
-    setError('');
-    navigate('/dashboard')
+      const data = await response.json();
 
+      if (response.ok) {
+        // Store the token in cookies
+        Cookies.set('adminToken', data.token, { expires: 1 / 24 }); // Expires in 1 hour
+
+        // Reset form and navigate to dashboard
+        setEmail('');
+        setPassword('');
+        setError('');
+        navigate('/dashboard');
+      } else {
+        setError(data.message);
+      }
+    } catch (error) {
+      console.error('Error during login:', error.message);
+      setError('An error occurred during login');
+    }
   };
 
+  
+
   return (
-    <div style={{ backgroundImage: `url(${bg})` }} className="h-screen w-screen flex items-center justify-center">
+    <div style={{ backgroundImage: `url(${bg})` }} className="bg-cover h-screen w-screen flex items-center justify-center">
       <div className="container w-auto p-10 border border-black rounded-md bg-white">
         <h2 className="text-2xl font-bold mb-4">Login</h2>
 

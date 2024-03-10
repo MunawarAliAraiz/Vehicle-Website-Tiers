@@ -14,8 +14,15 @@ import {
     DocumentIcon
   } from "@heroicons/react/24/solid";
   import { Link } from "react-router-dom";
+import Cookies from 'js-cookie';
+
    
   export default function DefaultSidebar() {
+
+    const handleLogout = () => {
+      Cookies.remove('adminToken');
+    }
+
     return (
       <Card className="w-full md:max-w-[16rem] p-4 shadow-xl shadow-blue-gray-900/5 bg-blue-gray-50">
         <div className="mb-2 p-4">
@@ -77,7 +84,7 @@ import {
             </ListItem>
           </Link>
           
-          <Link to={'/'}>
+          <Link onClick={handleLogout} to={'/'}>
             <ListItem>
               <ListItemPrefix>
                 <PowerIcon className="h-5 w-5" />
