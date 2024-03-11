@@ -16,13 +16,26 @@ const BlogForm = () => {
     updatedAt: '',
   });
 
+  // State to track whether an image is uploaded
+  const [imageUploaded, setImageUploaded] = useState(false);
+
   // Function to handle form input changes
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, files } = e.target;
+
+    // If the input is a file input, use the selected file
+    const file = name === 'img' ? URL.createObjectURL(files[0]) : null;
+    // URL.createObjectURL(blogData.imageFile)
+
     setBlogData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: name === 'img' ? file : value,
     }));
+
+    // Set imageUploaded to true when an image is selected
+    if (name === 'img' && file) {
+      setImageUploaded(true);
+    }
   };
 
   // Function to handle form submission
@@ -47,7 +60,10 @@ const BlogForm = () => {
       // Assuming you have a function to fetch blog data based on the ID from your API
       // Replace the following placeholder with your actual API call
       fetchBlogDataById(blogId);
+      console.log(blogData)
     }
+    console.log(blogData)
+    
   }, [blogId]);
 
   // Function to fetch blog data based on ID (replace with your actual API call)
@@ -55,6 +71,7 @@ const BlogForm = () => {
     const blog = blogs.find((blog) => blog.id === Number(blogId));
     if (blog) {
       setBlogData(blog);
+      setImageUploaded(true); // Set imageUploaded to true when editing an existing blog
     }
   };
 
@@ -70,18 +87,30 @@ const BlogForm = () => {
       </p>
       <h2 className="text-2xl font-bold mb-4">{blogId ? 'Edit Blog' : 'Add Blog'}</h2>
       <form onSubmit={handleSubmit}>
-        {/* Input fields for blog data */}
-        <div className="mb-4">
+        {/* Image display box */}
+        <div className="mb-4 relative">
           <label htmlFor="img" className="block text-gray-700 font-bold mb-2">
-            Image URL:
+            Image:
           </label>
+          <div className="mb-4 w-32 h-32 bg-gray-200 border border-gray-300 flex items-center justify-center">
+            {imageUploaded && blogData.img && (
+              <img
+                src={blogData.img}
+                alt="Blog"
+                className="w-full h-full object-cover"
+              />
+            )}
+            {!imageUploaded && !blogData.imageFile && (
+              <span className="text-gray-500">Add Image</span>
+            )}
+          </div>
+          {/* File input for image */}
           <input
-            type="text"
+            type="file"
             id="img"
             name="img"
-            value={blogData.img}
             onChange={handleInputChange}
-            className="w-full p-2 border border-gray-300 rounded"
+            className=""
           />
         </div>
 
