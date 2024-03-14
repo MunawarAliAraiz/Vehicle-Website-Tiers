@@ -1,19 +1,54 @@
-// CarDetail.js
-import React from 'react';
-import { cars } from '../utils/carsData';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 
 const CarDetail = () => {
   // Accessing the 'id' parameter from the URL
-  const { id } = useParams();
+  const { _id } = useParams();
   const navigate = useNavigate();
+  const [car, setCar] = useState(null);
 
-  // Find the car with the matching ID
-  const car = cars.find((car) => car.id === Number(id));
+  useEffect(() => {
+    const fetchCar = async () => {
+      try {
+        const response = await axios.get(`http://localhost:4000/api/cars/${_id}`);
+        setCar(response.data.car);
+      } catch (error) {
+        console.error('Error fetching car:', error);
+      }
+    };
+
+    fetchCar();
+  }, [_id]);
+
+
+  const handleEdit = () => {
+    navigate(`/edit-car/${_id}`);
+  };
+
+  const confirmDelete = () => {
+    const result = window.confirm('Are you sure you want to delete this car?');
+    if (result) {
+      handleDelete();
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      // Send delete request to the API
+      await axios.delete(`http://localhost:4000/api/cars/${_id}`);
+      console.log('Car deleted successfully');
+      // Redirect to the blog management page or any other appropriate page
+      navigate('/manage-blogs');
+    } catch (error) {
+      console.error('Error deleting car:', error);
+    }
+  };
 
   if (!car) {
     // Handle case when the car is not found
-    return <div className="text-center mt-8">Car not found</div>;
+    return <div className="text-center mt-8">Loading...</div>;
   }
 
   // Destructuring car details
@@ -33,17 +68,7 @@ const CarDetail = () => {
     createdAt,
   } = car;
 
-  // Handle Edit button click
-  const handleEdit = () => {
-    navigate(`/edit-car/${id}`)
-    console.log('Edit button clicked');
-  };
-
-  // Handle Delete button click
-  const handleDelete = () => {
-    // Add logic to delete the current car
-    console.log('Delete button clicked');
-  };
+  
 
   return (
     <div className="container mx-auto p-4 min-h-[100vh]">
@@ -85,7 +110,7 @@ const CarDetail = () => {
           </button>
           <button
             className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-            onClick={handleDelete}
+            onClick={confirmDelete}
           >
             Delete
           </button>

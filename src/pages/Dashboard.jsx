@@ -1,10 +1,37 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import BlogCard from '../components/BlogCard';
 import CarCard from '../components/CarCard';
-import { blogs } from '../utils/blogsData';
-import { cars } from '../utils/carsData';
+import axios from 'axios';
 
 const Dashboard = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [cars, setCars] = useState([]);
+
+  // Fetch blog and car data from API
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/blogs/list');
+        setBlogs(response.data.blogs);
+      } catch (error) {
+        console.error('Error fetching blogs:', error);
+      }
+    };
+
+    const fetchCars = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/cars/list');
+        setCars(response.data.cars);
+      } catch (error) {
+        console.error('Error fetching cars:', error);
+      }
+    };
+
+    fetchBlogs();
+    fetchCars();
+  }, []);
+  
   // Get the latest 4 blogs and cars
   const latestBlogs = blogs.slice(0, 4);
   const latestCars = cars.slice(0, 4);

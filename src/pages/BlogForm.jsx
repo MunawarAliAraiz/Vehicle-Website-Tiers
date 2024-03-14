@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Import axios
 import { blogs } from '../utils/blogsData';
 
 const BlogForm = () => {
@@ -8,12 +9,13 @@ const BlogForm = () => {
 
   // State for blog data
   const [blogData, setBlogData] = useState({
+    imgFile: null,
     img: '',
     title: '',
     details: '',
     writer: '',
-    createdAt: '',
-    updatedAt: '',
+    createdAt: null,
+    updatedAt: null,
   });
 
   // State to track whether an image is uploaded
@@ -24,54 +26,116 @@ const BlogForm = () => {
     const { name, value, files } = e.target;
 
     // If the input is a file input, use the selected file
-    const file = name === 'img' ? URL.createObjectURL(files[0]) : null;
-    // URL.createObjectURL(blogData.imageFile)
-
+    const file = name === 'img' ? files[0] : null;
+  
     setBlogData((prevData) => ({
       ...prevData,
-      [name]: name === 'img' ? file : value,
+      [name]: name === 'img' ? URL.createObjectURL(files[0]) : value,
     }));
 
     // Set imageUploaded to true when an image is selected
     if (name === 'img' && file) {
       setImageUploaded(true);
+      setBlogData((prevData) => ({
+        ...prevData,
+        imgFile: file,
+      }));
     }
   };
 
   // Function to handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your logic to handle form submission (add or edit blog)
-    if (blogId) {
-      // Logic for editing blog
-      console.log('Editing blog with ID:', blogId, blogData);
-      // Update the blog data in your state or API
-    } else {
-      // Logic for adding new blog
-      console.log('Adding new blog', blogData);
-      // Add the new blog data to your state or API
+    try {
+      // Check if a new image is selected for update
+      if (blogData.imgFile) {
+        // Step 1: Upload the image to the server
+        const imageFormData = new FormData();
+        imageFormData.append('blog_image', blogData.imgFile);
+  
+        const uploadResponse = await axios.post('http://localhost:4000/api/upload/blog/', imageFormData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+  
+        // Extract the image URL from the response
+        const imageUrl = uploadResponse.data.blog['url'];
+  
+        // Update the blog entry with the new image URL
+        const blogPayload = {
+          img: imageUrl,
+          title: blogData.title,
+          details: blogData.details,
+          writer: blogData.writer,
+          updatedAt: Date.now(),
+        };
+  
+        if (blogId) {
+          // Update the blog in the database
+          const updateResponse = await axios.put(`http://localhost:4000/api/blogs/update/${blogId}`, blogPayload);
+          alert('Blog updated successfully')
+          navigate('/manage-blogs'); // Navigate to the blog management page after submission
+        } else {
+          // Add the new blog to the database
+          const addResponse = await axios.post('http://localhost:4000/api/blogs/add', blogPayload);
+          alert('Blog added successfully')
+          navigate('/manage-blogs'); // Navigate to the blog management page after submission
+        }
+      } else {
+        // No new image selected, update the blog without changing the image
+        const blogPayload = {
+          img: blogData.img,
+          title: blogData.title,
+          details: blogData.details,
+          writer: blogData.writer,
+          updatedAt: Date.now(),
+        };
+  
+        if (blogId) {
+          // Update the blog in the database
+          const updateResponse = await axios.put(`http://localhost:4000/api/blogs/update/${blogId}`, blogPayload);
+          alert('Blog updated successfully')
+          navigate('/manage-blogs'); // Navigate to the blog management page after submission
+        } else {
+          // Add the new blog to the database
+          const addResponse = await axios.post('http://localhost:4000/api/blogs/add', blogPayload);
+          alert('Blog added successfully')
+          navigate('/manage-blogs'); // Navigate to the blog management page after submission
+        }
+      }
+  
+      // navigate('/manage-blogs'); // Navigate to the blog management page after submission
+    } catch (error) {
+      console.error('Error:', error.message);
+      // Handle the error, display a message, etc.
     }
-    navigate('/manage-blogs'); // Navigate to the blog management page after submission
   };
+  
 
   // Fetch initial blog data if editing an existing blog
   useEffect(() => {
     if (blogId) {
-      // Assuming you have a function to fetch blog data based on the ID from your API
-      // Replace the following placeholder with your actual API call
       fetchBlogDataById(blogId);
-      console.log(blogData)
     }
-    console.log(blogData)
-    
   }, [blogId]);
 
   // Function to fetch blog data based on ID (replace with your actual API call)
-  const fetchBlogDataById = (blogId) => {
-    const blog = blogs.find((blog) => blog.id === Number(blogId));
-    if (blog) {
-      setBlogData(blog);
-      setImageUploaded(true); // Set imageUploaded to true when editing an existing blog
+  const fetchBlogDataById = async (blogId) => {
+    try {
+      const response = await axios.get(`http://localhost:4000/api/cars/${blogId}`);
+      const blog = response.data.blog
+    
+      if (blog) {
+        setBlogData(blog);
+        setImageUploaded(true); // Set imageUploaded to true when editing an existing blog
+      } else {
+        // Handle case when blog with specified ID is not found
+        console.log(`Blog with ID ${blogId} not found`);
+      }
+    } catch (error) {
+      // Handle error
+      console.error('Error fetching blog data:', error);
     }
   };
 
@@ -100,7 +164,7 @@ const BlogForm = () => {
                 className="w-full h-full object-cover"
               />
             )}
-            {!imageUploaded && !blogData.imageFile && (
+            {!imageUploaded && !blogData.imgFile && (
               <span className="text-gray-500">Add Image</span>
             )}
           </div>
@@ -151,20 +215,6 @@ const BlogForm = () => {
             id="writer"
             name="writer"
             value={blogData.writer}
-            onChange={handleInputChange}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="createdAt" className="block text-gray-700 font-bold mb-2">
-            Created At:
-          </label>
-          <input
-            type="text"
-            id="createdAt"
-            name="createdAt"
-            value={blogData.createdAt}
             onChange={handleInputChange}
             className="w-full p-2 border border-gray-300 rounded"
           />

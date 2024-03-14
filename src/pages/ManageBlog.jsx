@@ -1,18 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BlogCard from '../components/BlogCard';
-import { blogs } from '../utils/blogsData';
 import { Link } from 'react-router-dom';
-
+import axios from 'axios';
 
 const ManageBlog = () => {
+  // State for blog data
+  const [blogs, setBlogs] = useState([]);
   // State for current page
   const [currentPage, setCurrentPage] = useState(1);
-
   // Number of blogs to display per page
   const blogsPerPage = 4;
-
   // State for search input
   const [searchInput, setSearchInput] = useState('');
+
+  // Fetch blog data from API
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/blogs/list');
+        setBlogs(response.data.blogs);
+      } catch (error) {
+        console.error('Error fetching blogs:', error);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
 
   // Filtered blogs based on search input
   const filteredBlogs = blogs.filter((blog) =>
@@ -34,7 +47,7 @@ const ManageBlog = () => {
   // Function to handle search
   const handleSearch = () => {
     setCurrentPage(1); // Reset currentPage to 1 when performing a new search
-    setSearchInput(/* Add your logic here */);
+    // setSearchInput(/* Add your logic here */); // You can add logic for search here if needed
   };
 
   return (
@@ -64,11 +77,10 @@ const ManageBlog = () => {
         Add New Blogs
       </Link>
 
-
       {/* Blog cards grid or flex */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 transition-opacity duration-1000 ease-in-out">
         {currentBlogs.map((blog) => (
-          <BlogCard key={blog.id} blog={blog} />
+          <BlogCard key={blog._id} blog={blog} />
         ))}
       </div>
 

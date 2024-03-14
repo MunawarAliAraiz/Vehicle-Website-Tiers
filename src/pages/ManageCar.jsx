@@ -1,17 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CarCard from '../components/CarCard';
-import { cars } from '../utils/carsData';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const ManageCar = () => {
+  // State for blog data
+  const [cars, setCars] = useState([]);
   // State for current page
   const [currentPage, setCurrentPage] = useState(1);
-
   // Number of cars to display per page
   const carsPerPage = 4;
-
   // State for search input
   const [searchInput, setSearchInput] = useState('');
+
+  // Fetch blog data from API
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/cars/list');
+        setCars(response.data.cars);
+      } catch (error) {
+        console.error('Error fetching blogs:', error);
+      }
+    };
+
+    fetchCars();
+  }, []);
 
   // Filtered cars based on search input
   const filteredCars = cars.filter((car) =>

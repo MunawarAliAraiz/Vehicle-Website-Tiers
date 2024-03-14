@@ -47,7 +47,7 @@ function App() {
         console.error('Error during admin verification:', error.message);
       });
     }
-  }, [navigate]);
+  }, []);
 
 
   return (
@@ -57,15 +57,15 @@ function App() {
             <Route path='/' element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/orders" element={<Orders />} />
-            <Route path="/manage-car" element={<ManageCar />} />
+            <Route path="/manage-cars" element={<ManageCar />} />
             <Route path="/add-car" element={<CarForm />} />
             <Route path="/edit-car/:carId" element={<CarForm />} />
             <Route path="/manage-blogs" element={<ManageBlog />} />
             <Route path="/add-blog" element={<BlogForm />} />
             <Route path="/edit-blog/:blogId" element={<BlogForm />} />
             <Route path="/credentials" element={<Credentials />} />
-            <Route path="/car/:id" element={<CarDetail />} />
-            <Route path="/blog/:id" element={<BlogDetail />} />
+            <Route path="/car/:_id" element={<CarDetail />} />
+            <Route path="/blog/:_id" element={<BlogDetail />} />
           </Routes>
         </div>
   );

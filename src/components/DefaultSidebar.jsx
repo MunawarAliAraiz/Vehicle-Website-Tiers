@@ -51,7 +51,7 @@ import Cookies from 'js-cookie';
               Dashboard
             </ListItem>
           </Link>
-          <Link to={'/manage-car'}>
+          <Link to={'/manage-cars'}>
             <ListItem>
               <ListItemPrefix>
                 <TruckIcon className="h-5 w-5" />
