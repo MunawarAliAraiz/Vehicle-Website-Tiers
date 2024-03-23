@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Import axios
 import { blogs } from '../utils/blogsData';
+import { serverUrl } from '../utils/serverUrl';
 
 const BlogForm = () => {
   const { blogId } = useParams();
@@ -123,7 +124,7 @@ const BlogForm = () => {
   // Function to fetch blog data based on ID (replace with your actual API call)
   const fetchBlogDataById = async (blogId) => {
     try {
-      const response = await axios.get(`http://localhost:4000/api/cars/${blogId}`);
+      const response = await axios.get(`${serverUrl}/api/cars/${blogId}`);
       const blog = response.data.blog
     
       if (blog) {

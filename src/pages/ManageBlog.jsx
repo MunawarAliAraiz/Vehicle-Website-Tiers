@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import BlogCard from '../components/BlogCard';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { serverUrl } from '../utils/serverUrl';
 
 const ManageBlog = () => {
   // State for blog data
@@ -17,7 +18,7 @@ const ManageBlog = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/blogs/list');
+        const response = await axios.get(`${serverUrl}/api/blogs/list`);
         setBlogs(response.data.blogs);
       } catch (error) {
         console.error('Error fetching blogs:', error);

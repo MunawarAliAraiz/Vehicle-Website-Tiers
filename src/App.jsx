@@ -1,5 +1,5 @@
-
-import { useState, useEffect } from "react";import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import DefaultSidebar from "./components/DefaultSidebar";
 import Orders from "./pages/Orders";
 import Credentials from "./pages/Credentials";
@@ -13,12 +13,12 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Cookies from 'js-cookie';
 import "./App.css";
+import { serverUrl } from "./utils/serverUrl";
 
 function App() {
   const [count, setCount] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
-  const serverUrl = 'http://localhost:4000';
 
   // Check if the current route is the login route
   const isLoginRoute = location.pathname === "/";

@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import bg from '../assets/bg.jpg';
 import Cookies from 'js-cookie';
-
-
-const serverUrl = 'http://localhost:4000';
+import { serverUrl } from '../utils/serverUrl';
 
 const Credentials = () => {
   const [currentPassword, setCurrentPassword] = useState('');

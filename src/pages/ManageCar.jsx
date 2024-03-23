@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CarCard from '../components/CarCard';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { serverUrl } from '../utils/serverUrl';
 
 const ManageCar = () => {
   // State for blog data
@@ -17,7 +18,7 @@ const ManageCar = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/cars/list');
+        const response = await axios.get(`${serverUrl}/api/cars/list`);
         setCars(response.data.cars);
       } catch (error) {
         console.error('Error fetching blogs:', error);

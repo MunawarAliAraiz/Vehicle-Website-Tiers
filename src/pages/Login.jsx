@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import bg from '../assets/bg.jpg';
-
-const serverUrl = 'http://localhost:4000';
+import { serverUrl } from '../utils/serverUrl';
 
 const Login = () => {
   const [email, setEmail] = useState('');

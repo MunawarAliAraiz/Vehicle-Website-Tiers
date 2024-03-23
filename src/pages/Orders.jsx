@@ -2,6 +2,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { serverUrl } from '../utils/serverUrl';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -9,7 +10,7 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/orders/list');
+        const response = await axios.get(`${serverUrl}/api/orders/list`);
         const fetchedOrders = response.data.orders;
 
         const uniqueOrders = [];

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { serverUrl } from '../utils/serverUrl';
 
 
 const CarDetail = () => {
@@ -12,7 +13,7 @@ const CarDetail = () => {
   useEffect(() => {
     const fetchCar = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/api/cars/${_id}`);
+        const response = await axios.get(`${serverUrl}/api/cars/${_id}`);
         setCar(response.data.car);
       } catch (error) {
         console.error('Error fetching car:', error);
@@ -37,7 +38,7 @@ const CarDetail = () => {
   const handleDelete = async () => {
     try {
       // Send delete request to the API
-      await axios.delete(`http://localhost:4000/api/cars/${_id}`);
+      await axios.delete(`${serverUrl}/api/cars/${_id}`);
       console.log('Car deleted successfully');
       // Redirect to the blog management page or any other appropriate page
       navigate('/manage-blogs');

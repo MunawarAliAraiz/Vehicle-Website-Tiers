@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from 'axios'; // Import axios
 import { cars } from "../utils/carsData";
+import { serverUrl } from "../utils/serverUrl";
 
 const CarForm = () => {
   const { carId } = useParams();
@@ -158,7 +159,7 @@ const CarForm = () => {
   // Function to fetch car data based on ID (replace with your actual API call)
   const fetchCarDataById = async (carId) => {
     try {
-      const response = await axios.get(`http://localhost:4000/api/cars/${carId}`);
+      const response = await axios.get(`${serverUrl}/api/cars/${carId}`);
       const car = response.data.car
       
       if (car) {

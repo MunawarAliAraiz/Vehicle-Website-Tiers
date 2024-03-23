@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import BlogCard from '../components/BlogCard';
 import CarCard from '../components/CarCard';
 import axios from 'axios';
+import { serverUrl } from '../utils/serverUrl';
 
 const Dashboard = () => {
   const [blogs, setBlogs] = useState([]);
@@ -12,7 +13,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/blogs/list');
+        const response = await axios.get(`${serverUrl}/api/blogs/list`);
         setBlogs(response.data.blogs);
       } catch (error) {
         console.error('Error fetching blogs:', error);
@@ -21,7 +22,7 @@ const Dashboard = () => {
 
     const fetchCars = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/cars/list');
+        const response = await axios.get(`${serverUrl}/api/cars/list`);
         setCars(response.data.cars);
       } catch (error) {
         console.error('Error fetching cars:', error);
