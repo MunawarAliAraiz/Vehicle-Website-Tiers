@@ -63,7 +63,7 @@ const Dashboard = () => {
       {/* Blog cards grid or flex */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 transition-opacity duration-1000 ease-in-out mb-4">
         {latestBlogs.map((blog) => (
-          <BlogCard key={blog.id} blog={blog} />
+          <BlogCard key={blog._id} blog={blog} />
         ))}
       </div>
 

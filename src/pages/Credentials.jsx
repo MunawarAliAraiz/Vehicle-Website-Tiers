@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import bg from '../assets/bg.jpg'
+import bg from '../assets/bg.jpg';
+import Cookies from 'js-cookie';
+
+
+const serverUrl = 'http://localhost:4000';
 
 const Credentials = () => {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -7,32 +11,53 @@ const Credentials = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Validation logic
     if (newPassword !== confirmPassword) {
       setError("Passwords don't match");
       return;
     }
 
-    // Handle password change logic
-    // ...
+    try {
+      // Send a request to change admin password
+      const response = await fetch(`${serverUrl}/api/users/adminchangepassword`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': Cookies.get('adminToken'),
+        },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
 
-    // Reset form
-    setCurrentPassword('');
-    setNewPassword('');
-    setConfirmPassword('');
-    setError('');
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccessMessage(data.message);
+        setError('');
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+      } else {
+        setError(data.message);
+        setSuccessMessage('');
+      }
+    } catch (error) {
+      console.error('Error during password change:', error.message);
+      setError('An error occurred during password change');
+      setSuccessMessage('');
+    }
   };
 
   return (
     <div style={{ backgroundImage: `url(${bg})` }} className="h-screen w-screen flex items-center justify-center">
       <div className="container w-auto p-10 border border-black rounded-md bg-white">
-        <h2 className="text-2xl font-bold mb-4">Change Credentials</h2>
+        <h2 className="text-2xl font-bold mb-4">Change Admin Password</h2>
 
         {/* Current Password */}
         <div className="form-group">
@@ -69,6 +94,7 @@ const Credentials = () => {
             className="w-full p-2 border border-gray-300 rounded"
           />
           {error && <span className="text-red-500">{error}</span>}
+          {successMessage && <span className="text-green-500">{successMessage}</span>}
         </div>
 
         {/* Show/Hide Password */}
