@@ -54,7 +54,7 @@ const BlogForm = () => {
         const imageFormData = new FormData();
         imageFormData.append('blog_image', blogData.imgFile);
   
-        const uploadResponse = await axios.post('http://localhost:4000/api/upload/blog/', imageFormData, {
+        const uploadResponse = await axios.post(`${serverUrl}/api/upload/blog/`, imageFormData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -74,12 +74,12 @@ const BlogForm = () => {
   
         if (blogId) {
           // Update the blog in the database
-          const updateResponse = await axios.put(`http://localhost:4000/api/blogs/update/${blogId}`, blogPayload);
+          const updateResponse = await axios.put(`${serverUrl}/api/blogs/update/${blogId}`, blogPayload);
           alert('Blog updated successfully')
           navigate('/manage-blogs'); // Navigate to the blog management page after submission
         } else {
           // Add the new blog to the database
-          const addResponse = await axios.post('http://localhost:4000/api/blogs/add', blogPayload);
+          const addResponse = await axios.post(`${serverUrl}/api/blogs/add`, blogPayload);
           alert('Blog added successfully')
           navigate('/manage-blogs'); // Navigate to the blog management page after submission
         }
@@ -95,12 +95,12 @@ const BlogForm = () => {
   
         if (blogId) {
           // Update the blog in the database
-          const updateResponse = await axios.put(`http://localhost:4000/api/blogs/update/${blogId}`, blogPayload);
+          const updateResponse = await axios.put(`${serverUrl}/api/blogs/update/${blogId}`, blogPayload);
           alert('Blog updated successfully')
           navigate('/manage-blogs'); // Navigate to the blog management page after submission
         } else {
           // Add the new blog to the database
-          const addResponse = await axios.post('http://localhost:4000/api/blogs/add', blogPayload);
+          const addResponse = await axios.post(`${serverUrl}/api/blogs/add`, blogPayload);
           alert('Blog added successfully')
           navigate('/manage-blogs'); // Navigate to the blog management page after submission
         }

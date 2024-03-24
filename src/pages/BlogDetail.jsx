@@ -35,7 +35,7 @@ const BlogDetail = () => {
   const handleDelete = async () => {
     try {
       // Send delete request to the API
-      await axios.delete(`http://localhost:4000/api/blogs/${_id}`);
+      await axios.delete(`${serverUrl}/api/blogs/${_id}`);
       console.log('Blog deleted successfully');
       // Redirect to the blog management page or any other appropriate page
       navigate('/manage-blogs');
