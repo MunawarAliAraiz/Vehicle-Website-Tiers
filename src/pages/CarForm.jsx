@@ -63,7 +63,7 @@ const CarForm = () => {
         imageFormData.append("car_image", carData.imgFile);
 
         const uploadResponse = await axios.post(
-          "http://localhost:4000/api/upload/car/",
+          `${serverUrl}/api/upload/car/`,
           imageFormData,
           {
             headers: {
@@ -94,7 +94,7 @@ const CarForm = () => {
         if (carId) {
           // Update the car in the database
           const updateResponse = await axios.put(
-            `http://localhost:4000/api/cars/update/${carId}`,
+            `${serverUrl}/api/cars/update/${carId}`,
             carPayload
           );
           alert("Car updated successfully");
@@ -102,7 +102,7 @@ const CarForm = () => {
         } else {
           // Add the new car to the database
           const addResponse = await axios.post(
-            "http://localhost:4000/api/cars/add",
+            `${serverUrl}/api/cars/add`,
             carPayload
           );
           alert("Car added successfully");
@@ -128,7 +128,7 @@ const CarForm = () => {
         if (carId) {
           // Update the car in the database
           const updateResponse = await axios.put(
-            `http://localhost:4000/api/cars/update/${carId}`,
+            `${serverUrl}/api/cars/update/${carId}`,
             carPayload
           );
           alert("Car updated successfully");
@@ -136,7 +136,7 @@ const CarForm = () => {
         } else {
           // Add the new car to the database
           const addResponse = await axios.post(
-            "http://localhost:4000/api/cars/add",
+            `${serverUrl}/api/cars/add`,
             carPayload
           );
           alert("Car added successfully");
